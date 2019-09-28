@@ -1,0 +1,7 @@
+<template name="bottom_line">
+    <view wx:if="{{(status || false)}}" class="data-bottom-line">
+        <view class="left fl"></view>
+        <view class="msg fl">没有更多数据了</view>
+        <view class="right fr"></view>
+    </view>
+</template>

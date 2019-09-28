@@ -1,0 +1,46 @@
+<!-- 搜索 -->
+<view wx:if="{{common_app_is_header_nav_fixed == 1}}" class="search-fixed-seat"></view>
+<view wx:if="{{load_status == 1 && common_app_is_enable_search == 1}}" class="search wh-auto {{common_app_is_header_nav_fixed == 1 ? 'search-fixed' : ''}}">
+  <view class="search-content bg-white oh">
+    <icon type="search" size="16" />
+    <input type="text" confirm-type="search" placeholder="请输入要搜索的药品" class="wh-auto cr-888" bindconfirm="search_input_event" confirm-type="search" />
+  </view>
+</view>
+
+<!-- 列表 -->
+<scroll-view scroll-y="{{true}}" class="scroll-box" bindscrolltolower="scroll_lower" lower-threshold="30">
+  <view class="data-list">
+    <view class="items bg-white" wx:for="{{result.dataList}}">
+      <navigator url="/pages/goods-detail/goods-detail?goods_id={{item.goodsId}}" hover-class="none">
+        <view class="base">
+         <view class="tx-right">
+          <image src="/images/otc.jpg" mode="scaleToFill" />
+        </view>
+         <image  class="items-image" src="http://{{item.pic_1}}" mode="scaleToFill" />
+          <view class="single-text">{{item.goodsName}}</view>
+          <view class="spec cr-888 line-limit-length">
+            {{item.manufacturer}}</view>
+          <view class="spec cr-888">{{item.goodsSpec}}</view>
+          <view class="price">
+            <text class="sales-price">￥{{item.a_SaleP}}</text>
+          </view>
+    </view>
+    </navigator>
+  </view>
+  </view>
+
+  <view wx:if="{{result.dataList.totalNum == 0}}">
+    <import src="/pages/common/nodata.wxml" />
+    <template is="nodata" data="{{status: data_list_loding_status}}"></template>
+  </view>
+</scroll-view>
+
+<!-- 结尾 -->
+<import src="/pages/common/bottom_line.wxml" />
+<template is="bottom_line" data="{{status: data_bottom_line_status}}"></template>
+
+<!-- 版权 
+<view wx:if="{{load_status == 1}}">
+  <import src="/pages/common/copyright.wxml" />
+  <template is="copyright"></template>
+</view>-->

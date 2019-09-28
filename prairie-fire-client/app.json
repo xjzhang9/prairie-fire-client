@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/cart/cart",
+    "pages/login/login",
+    "pages/goods-search/goods-search",
+    "pages/goods-detail/goods-detail",
+    "pages/buy/buy",
+    "pages/user-order/user-order",
+    "pages/user-order-detail/user-order-detail"
+  ],
+  "window": {
+    "navigationBarTitleText": "云易采",
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#fff"
+  },
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "#d2364c",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "/images/nav-icon-home.png",
+        "selectedIconPath": "/images/nav-icon-home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "iconPath": "/images/nav-icon-cart.png",
+        "selectedIconPath": "/images/nav-icon-cart-active.png",
+        "text": "购物车"
+      },
+      {
+        "pagePath": "pages/user-order/user-order",
+        "iconPath": "/images/nav-icon-user.png",
+        "selectedIconPath": "/images/nav-icon-user-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+
+  "plugins": {},
+  "debug": true,
+  "sitemapLocation": "sitemap.json"
+}
