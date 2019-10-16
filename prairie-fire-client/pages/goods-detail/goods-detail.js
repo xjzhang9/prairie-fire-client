@@ -4,7 +4,7 @@ Page({
     success: false,
     msg: null,
     code: null,
-    result:null,
+    result: null,
     indicator_dots: false,
     indicator_color: 'rgba(0, 0, 0, .3)',
     indicator_active_color: '#e31c55',
@@ -15,33 +15,33 @@ Page({
     data_list_loding_msg: '',
     params: null,
     result: {
-      goodsId:"",
-      goodsName:"",
-      saleTaxp:0,
-      goodsSpec:0,
-      manufacturer:"",
-      beactive:"",
-      goodsCode:"",
-      shortName:"",
-      logogram:"",
-      goodsSpec:"",
-      place:"",
-      goodsDesc:"",
-      treatment:"",
-      gcategory:"",
-      approvalNo:"",
-      approvalTo:"",
-      formula:"",
-      inEffectDay:0,
-      dayUnit:"",
-      storageTerm:"",
-      wholLimtNum:0,
-      isEphe:"",
-      recipeType:"",
-      goodsPurpose:"",
-      inventoryNum:0,
-      inventoryNumAndUnit :"",
-      unit:""
+      goodsId: "",
+      goodsName: "",
+      saleTaxp: 0,
+      goodsSpec: 0,
+      manufacturer: "",
+      beactive: "",
+      goodsCode: "",
+      shortName: "",
+      logogram: "",
+      goodsSpec: "",
+      place: "",
+      goodsDesc: "",
+      treatment: "",
+      gcategory: "",
+      approvalNo: "",
+      approvalTo: "",
+      formula: "",
+      inEffectDay: 0,
+      dayUnit: "",
+      storageTerm: "",
+      wholLimtNum: 0,
+      isEphe: "",
+      recipeType: "",
+      goodsPurpose: "",
+      inventoryNum: 0,
+      inventoryNumAndUnit: "",
+      unit: ""
     },
     goods_photo: [],
     goods_spec_base_price: 0.0,
@@ -65,15 +65,19 @@ Page({
   onLoad(params) {
     // 启动参数处理
     params = params.goods_id;
-    
+
     // 参数赋值,初始化
     //params['goods_id']=2;
-    this.setData({params: params});
+    this.setData({
+      params: params
+    });
     this.init();
   },
 
   onShow() {
-    wx.setNavigationBarTitle({ title: (this.data.result.goodsName == null) ? app.data.common_pages_title.goods_detail : this.data.result.goodsName});
+    wx.setNavigationBarTitle({
+      title: (this.data.result.goodsName == null) ? app.data.common_pages_title.goods_detail : this.data.result.goodsName
+    });
   },
 
   // 获取数据列表
@@ -84,8 +88,7 @@ Page({
     });
 
     // 参数校验
-    if((this.data.params || null) == null)
-    {
+    if ((this.data.params || null) == null) {
       wx.stopPullDownRefresh();
       this.setData({
         data_bottom_line_status: false,
@@ -96,7 +99,9 @@ Page({
       var self = this;
 
       // 加载loding
-      wx.showLoading({title: '加载中...'});
+      wx.showLoading({
+        title: '加载中...'
+      });
       this.setData({
         data_list_loding_status: 1
       });
@@ -113,7 +118,7 @@ Page({
           console.log("===data===" + JSON.stringify(res.data));
 
           if (res.data.success == true) {
-          
+
             var photos = [];
             if (res.data.result.pic_1 != null) {
               photos[0] = res.data.result.pic_1;
@@ -128,13 +133,13 @@ Page({
               photos[3] = res.data.result.pic_4;
             }
 
-            var beactive  = "";
+            var beactive = "";
             if (res.data.result.beactive == "N") {
               beactive = "是";
             } else {
               beactive = "否";
             }
-          
+
             var inEffectDay = res.data.result.inEffectDay + res.data.result.dayUnit;
             var isEphe = "";
             if (res.data.result.isEphe == "Y") {
@@ -146,7 +151,7 @@ Page({
             var inventoryNumAndUnit = res.data.result.inventoryNum + res.data.result.unit;
 
             self.setData({
-              result : {
+              result: {
                 goodsId: res.data.result.goodsId.replace(/^\s*|\s*$/g, ""),
                 goodsName: res.data.result.goodsName.replace(/^\s*|\s*$/g, ""),
                 saleTaxp: res.data.result.saleTaxp,
@@ -187,24 +192,26 @@ Page({
               // show_field_price_text: (data.goods.show_field_price_text == '销售价') ? null : (data.goods.show_field_price_text.replace(/<[^>]+>/g, "") || null),
             });
             // 标题
-            wx.setNavigationBarTitle({ title: res.data.result.goodsName});
+            wx.setNavigationBarTitle({
+              title: res.data.result.goodsName
+            });
 
 
             // 不能选择规格处理
             this.goods_specifications_choose_handle_dont(0);
 
             if (res.data.result.inventoryNum <= 0) {
-                this.setData({
-                  nav_submit_text: '商品卖光了',
-                  nav_submit_is_disabled: true,
-                });
-              }
-          } else if (res.data.result.beactive == "N") {
               this.setData({
-                nav_submit_text: '商品已下架',
+                nav_submit_text: '商品卖光了',
                 nav_submit_is_disabled: true,
               });
-          } else  {
+            }
+          } else if (res.data.result.beactive == "N") {
+            this.setData({
+              nav_submit_text: '商品已下架',
+              nav_submit_is_disabled: true,
+            });
+          } else {
             self.setData({
               data_bottom_line_status: false,
               data_list_loding_status: 0,
@@ -230,31 +237,28 @@ Page({
   // 不能选择规格处理
   goods_specifications_choose_handle_dont(key) {
     var temp_data = this.data.result.goodsSpec || [];
-    if(temp_data.length <= 0)
-    {
+    if (temp_data.length <= 0) {
       return false;
     }
 
     // 是否不能选择
-    for(var i in temp_data)
-    {
-      for(var k in temp_data[i]['value'])
-      {
-        if(i > key)
-        {
+    for (var i in temp_data) {
+      for (var k in temp_data[i]['value']) {
+        if (i > key) {
           temp_data[i]['value'][k]['is_dont'] = 'spec-dont-choose',
-          temp_data[i]['value'][k]['is_disabled'] = '';
+            temp_data[i]['value'][k]['is_disabled'] = '';
           temp_data[i]['value'][k]['is_active'] = '';
         }
 
         // 当只有一个规格的时候
-        if(key == 0 && temp_data.length == 1)
-        {
+        if (key == 0 && temp_data.length == 1) {
           temp_data[i]['value'][k]['is_disabled'] = ((temp_data[i]['value'][k]['is_only_level_one'] || null) != null && (temp_data[i]['value'][k]['inventory'] || 0) <= 0) ? 'spec-items-disabled' : '';
         }
       }
     }
-    this.setData({goods_specifications_choose: temp_data});
+    this.setData({
+      goods_specifications_choose: temp_data
+    });
   },
 
   // 下拉刷新
@@ -264,17 +268,25 @@ Page({
 
   // 购买弹层关闭
   popup_close_event(e) {
-    this.setData({popup_status: false});
+    this.setData({
+      popup_status: false
+    });
   },
 
   // 加入购物车
   cart_submit_event(e) {
-    this.setData({ popup_status: true, buy_event_type: 'cart' });
+    this.setData({
+      popup_status: true,
+      buy_event_type: 'cart'
+    });
   },
 
   // 立即购买
   buy_submit_event(e) {
-    this.setData({ popup_status: true, buy_event_type: 'buy'});
+    this.setData({
+      popup_status: true,
+      buy_event_type: 'buy'
+    });
   },
 
   // 加入购物车事件
@@ -287,37 +299,43 @@ Page({
     //   });
     //   return false;
     // } else {
-      wx.showLoading({title: '处理中...' });
-      var timestamp = Date.parse(new Date()) + "";
-      var businessId = timestamp
-      wx.request({
-        url:"http://122.112.184.150:7002/prairie/carts/add",
-        method: 'POST',
-        data: { "goodsId": this.data.result.goodsId, "num": this.data.temp_buy_number, "businessId": "12", "mobile": "15155157296"},
-        dataType: 'json',
-        success: (res) => {
-          wx.hideLoading();
-          console.log("===data===" + JSON.stringify(res.data));
-          if (res.data.success == true) {
-            this.popup_close_event();
-            app.showToast("添加成功", "success");
-          } else {
-            app.showToast(res.data.msg);
-          }
-        },
-        fail: () => {
-          wx.hideLoading();
-
-          app.showToast('服务器请求出错');
+    wx.showLoading({
+      title: '处理中...'
+    });
+    var timestamp = Date.parse(new Date()) + "";
+    var businessId = timestamp
+    wx.request({
+      url: "http://122.112.184.150:7002/prairie/carts/add",
+      method: 'POST',
+      data: {
+        "goodsId": this.data.result.goodsId,
+        "num": this.data.temp_buy_number,
+        "businessId": "12",
+        "mobile": "15155157296"
+      },
+      dataType: 'json',
+      success: (res) => {
+        wx.hideLoading();
+        console.log("===data===" + JSON.stringify(res.data));
+        if (res.data.success == true) {
+          this.popup_close_event();
+          app.showToast("添加成功", "success");
+        } else {
+          app.showToast(res.data.msg);
         }
-      });
+      },
+      fail: () => {
+        wx.hideLoading();
+
+        app.showToast('服务器请求出错');
+      }
+    });
     // }
   },
 
   // 数量输入事件
   goods_buy_number_blur(e) {
     var buy_number = parseInt(e.detail.value) || 1;
-    this.setData({temp_buy_number: buy_number});
     this.goods_buy_number_func(buy_number);
   },
 
@@ -325,11 +343,13 @@ Page({
   goods_buy_number_event(e) {
     var type = parseInt(e.currentTarget.dataset.type) || 0;
     var temp_buy_number = parseInt(this.data.temp_buy_number);
-    if(type == 0)
-    {
+    if (type == 0) {
       var buy_number = temp_buy_number - 1;
     } else {
       var buy_number = temp_buy_number + 1;
+    }
+    if (buy_number <= 0) {
+      buy_number = 1;
     }
     this.goods_buy_number_func(buy_number);
   },
@@ -342,17 +362,18 @@ Page({
     var buy_max_number = parseInt(this.data.result.wholLimtNum) || 0;
     var inventory = parseInt(this.data.goods_spec_base_inventory);
     var inventory_unit = this.data.result.unit;
-    
+
     if (buy_max_number > 0 && buy_number > buy_max_number) {
       buy_number = buy_max_number;
       app.showToast('限购' + buy_max_number + inventory_unit);
     }
-    if(buy_number > inventory)
-    {
+    if (buy_number > inventory) {
       buy_number = inventory;
-      app.showToast('库存数量'+inventory+inventory_unit);
+      app.showToast('库存数量' + inventory + inventory_unit);
     }
-    this.setData({temp_buy_number: buy_number});
+    this.setData({
+      temp_buy_number: buy_number
+    });
   },
 
   // 确认
@@ -365,34 +386,40 @@ Page({
     //   });
     //   return false;
     // } else {
-      // 属性
-      // var temp_data = this.data.goods_specifications_choose;
-      // var sku_count = temp_data.length;
-      // var active_count = 0;
-      // var spec = [];
-      // if(sku_count > 0)
-      // {
-      //   for(var i in temp_data)
-      //   {
-      //     for(var k in temp_data[i]['value'])
-      //     {
-      //       if((temp_data[i]['value'][k]['is_active'] || null) != null)
-      //       {
-      //         active_count++;
-      //         spec.push({"type": temp_data[i]['name'], "value": temp_data[i]['value'][k]['name']});
-      //       }
-      //     }
-      //   }
-      //   if(active_count < sku_count)
-      //   {
-      //     app.showToast('请选择属性');
-      //     return false;
-      //   }
-      // }
-      
+    // 属性
+    // var temp_data = this.data.goods_specifications_choose;
+    // var sku_count = temp_data.length;
+    // var active_count = 0;
+    // var spec = [];
+    // if(sku_count > 0)
+    // {
+    //   for(var i in temp_data)
+    //   {
+    //     for(var k in temp_data[i]['value'])
+    //     {
+    //       if((temp_data[i]['value'][k]['is_active'] || null) != null)
+    //       {
+    //         active_count++;
+    //         spec.push({"type": temp_data[i]['name'], "value": temp_data[i]['value'][k]['name']});
+    //       }
+    //     }
+    //   }
+    //   if(active_count < sku_count)
+    //   {
+    //     app.showToast('请选择属性');
+    //     return false;
+    //   }
+    // }
+
+    if (this.data.temp_buy_number <= 0) {
+      this.setData({
+        temp_buy_number: 1
+      });
+      app.showToast('数量不能为负');
+    } else {
       // 操作类型
       switch (this.data.buy_event_type) {
-        case 'buy' :
+        case 'buy':
           // 进入订单确认页面
           var data = {
             "buy_type": "goods",
@@ -406,13 +433,16 @@ Page({
           this.popup_close_event();
           break;
 
-        case 'cart' :
+        case 'cart':
           this.goods_cart_event(e);
           break;
 
-        default :
+        default:
           app.showToast("操作事件类型有误");
       }
+    }
+
+
     // }
   },
 
@@ -426,8 +456,7 @@ Page({
   // 详情图片查看
   goods_detail_images_view_event(e) {
     var value = e.currentTarget.dataset.value || null;
-    if(value != null)
-    {
+    if (value != null) {
       wx.previewImage({
         current: value,
         urls: [value]
@@ -438,8 +467,7 @@ Page({
   goods_photo_view_event(e) {
     var index = e.currentTarget.dataset.index;
     var all = [];
-    for (var i in this.data.goods_photo)
-    {
+    for (var i in this.data.goods_photo) {
       all.push("http://" + this.data.goods_photo[i]);
     }
     wx.previewImage({

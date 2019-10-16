@@ -1,6 +1,20 @@
 const app = getApp();
 Page({
   data: {
+    address: {
+      name: "张效见",
+      tel: "15155157296",
+      province_name: "安徽省",
+      city_name: "合肥市",
+      county_name: "蜀山区",
+      address: "石笋路禹州华侨城二期"
+    },
+    address_id: 0,
+    total_price: 0,
+    user_note_value: '',
+    is_first: 1,
+    extension_data: [],
+    common_order_is_booking: 0,
     detail: null,
     detail_list: [],
     data_list_loding_status: 1,
@@ -26,38 +40,28 @@ Page({
     });
 
     wx.request({
-      url: app.get_request_url("detail", "order"),
-      method: "POST",
-      data: {
-        id: this.data.params.id
-      },
-      dataType: "json",
+      url: "http://122.112.184.150:7002/prairie/order/getOrderDetail?billCode=" + this.data.params.id,
+      method: "GET",
       success: res => {
         wx.hideLoading();
         wx.stopPullDownRefresh();
-        if (res.data.code == 0) {
-          var data = res.data.data;
+        if (res.data.success == true) {
+          var data = res.data.result;
+          console.log("===index===" + JSON.stringify(res.data));
           self.setData({
             detail: data,
             detail_list:[
-              {name: "订单号", value: data.order_no || ''},
-              {name: "状态", value: data.status_name || ''},
-              {name: "支付状态", value: data.pay_status_name || ''},
-              {name: "单价", value: data.price || ''},
-              {name: "总价", value: data.total_price || ''},
-              {name: "优惠", value: data.preferential_price || ''},
-              {name: "支付金额", value: data.pay_price || ''},
-              {name: "支付方式", value: data.payment_name || ''},
-              {name: "快递公司", value: data.express_name || ''},
-              {name: "快递单号", value: data.express_number || ''},
+              { name: "订单号", value: data.billCode || ''},
+              { name: "状态", value: data.billState || ''},
+              { name: "总价", value: data.taxAmount || ''},
+              {name: "支付方式", value: '线下支付'},
               {name: "用户留言", value: data.user_note || ''},
-              {name: "创建时间", value: data.add_time || ''},
-              {name: "确认时间", value: data.confirm_time || ''},
-              {name: "支付时间", value: data.pay_time || ''},
+              { name: "创建时间", value: data.createTime || ''},
+              { name: "修改时间", value: data.latModifyTime || ''},
+              { name: "开票时间", value: data.delivery_time || '' },
               {name: "发货时间", value: data.delivery_time || ''},
-              {name: "收货时间", value: data.collect_time || ''},
+              {name: "送达时间", value: data.collect_time || ''},
               {name: "取消时间", value: data.close_time || ''},
-              {name: "关闭时间", value: data.close_time || ''},
             ],
             data_list_loding_status: 3,
             data_bottom_line_status: true,

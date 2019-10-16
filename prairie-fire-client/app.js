@@ -49,7 +49,13 @@ App({
     // 基础信息
     application_title: "{{application_title}}",
     application_describe: "{{application_describe}}",
+   
   },
+
+  globalData: {
+    order_status: "-1",
+  },
+
 
   /**
    * 小程序初始化
@@ -173,13 +179,8 @@ App({
       success: (res) => {
         if (res.code) {
           wx.request({
-            url: "http://122.112.184.150:7002/prairie/wx/login",
-            method: 'POST',
-            data: {
-              "code": res.code,
-              "encrypted": auth_data.encryptedData,
-              "iv": auth_data.iv
-            },
+            url: "http://122.112.184.150:7002/prairie/wx/login?code=" + res.code + "&encrypted=" + auth_data.encryptedData + "&iv=" + auth_data.iv,
+            method: 'GET',
             dataType: 'json',
             // header: {
             //   'content-type': 'application/x-www-form-urlencoded'

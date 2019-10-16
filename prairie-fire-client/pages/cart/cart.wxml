@@ -9,14 +9,20 @@
     <view class="bg-white items">
       <!-- 图片/链接 -->
       <navigator url="/pages/goods-detail/goods-detail?goods_id={{item.goodsId}}">
-        <image class="goods-image fl" src="http://{{item.picUrl}}" mode="aspectFill" />
+        <view class="image-view">
+          <image class="goods-image fl" src="http://{{item.picUrl}}" mode="aspectFill" />
+          <view class="tx-right">
+            <image src="/images/otc.jpg" mode="scaleToFill" />
+          </view>
+        </view>
+
       </navigator>
 
       <!-- 基础 -->
       <view class="goods-base">
         <view class="goods-title multi-text">{{item.goodsName}}
         </view>
-        <view class="goods-attribute spec cr-888">规格:{{item.unit}}</view>
+        <view class="goods-attribute spec cr-888">规格:{{item.goodsSpec}}</view>
         <view class="sales-price goods-price spacing-mb">￥{{item.saleTaxPrice}}
         </view>
       </view>
@@ -27,7 +33,6 @@
         <view bindtap="goods_buy_number_event" class="number-submit tc cr-888 fl" data-index="{{index}}" data-type="1">+</view>
       </view>
 
-      <!-- 价格 -->
       <view class="oh">
         <!-- 删除操作 -->
         <view class="fr delete" bindtap="cart_delete_event" data-index="{{index}}">删除</view>

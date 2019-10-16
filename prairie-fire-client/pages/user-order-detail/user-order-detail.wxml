@@ -1,54 +1,69 @@
-<view wx:if="{{detail != null}}">
-  <view class="address bg-white spacing-mb">
+<view wx:if="{{detail.orderDetailDTOS.length > 0}}" class="page">
+  <!-- 地址 -->
+  <view class="address bg-white arrow-right">
+    <view wx:if="{{address != null}}">
       <view class="address-base oh">
-          <text>{{detail.receive_name}}</text>
-          <text class="fr">{{detail.receive_tel}}</text>
+        <text>{{address.name}}</text>
+        <text class="fr">{{address.tel}}</text>
       </view>
       <view class="address-detail oh">
-          <image class="icon fl" src="/images/user-address.png" mode="widthFix" />
-          <view class="text fr">{{detail.receive_province_name}}{{detail.receive_city_name}}{{detail.receive_county_name}}{{detail.receive_address}}</view>
+        <image class="icon fl" src="/images/user-address.png" mode="widthFix" />
+        <view class="text fr">{{address.province_name}}{{address.city_name}}{{address.county_name}}{{address.address}}</view>
       </view>
+    </view>
   </view>
+  <view class="address-divider spacing-mb"></view>
 
+  <!-- 商品 -->
   <view class="goods bg-white spacing-mb">
-      <view wx:for="{{detail.items}}" class="goods-item oh">
-        <navigator url="/pages/goods-detail/goods-detail?goods_id={{item.goods_id}}" hover-class="none">
-          <image class="goods-image fl" src="{{item.images}}" mode="aspectFill" />
-          <view class="goods-base">
-            <view class="goods-title multi-text">{{item.title}}</view>
-            <block wx:if="{{item.spec != null}}">
-              <view class="goods-attribute cr-888" wx:for="{{item.spec}}" wx:for-item="spec">
-                {{spec.type}}:{{spec.value}}
-              </view>
-            </block>
-          </view>
-          <view class="oh goods-price">
-            <text class="sales-price">￥{{item.price}}</text>
-            <text wx:if="{{item.original_price > 0}}" class="original-price">￥{{item.original_price}}</text>
-            <text class="buy-number">x{{item.buy_number}}</text>
-          </view>
-        </navigator>
+    <view wx:for="{{detail.orderDetailDTOS}}" wx:key="key" class="goods-item oh">
+      <image class="goods-image fl" src="http://{{item.picUrl}}" mode="aspectFill" />
+      <!-- 基础 -->
+      <view class="goods-base">
+        <view class="goods-title multi-text">{{item.goodsName}}
+        </view>
+        <view class="goods-attribute spec cr-888">规格:{{item.goodsSpec}}</view>
+        <view class="sales-price goods-price spacing-mb">￥{{item.saleTaxPrice}}
+          <text class="buy-number cr-888">x{{item.num}} </text>
+        </view>
       </view>
-  </view>
-
-  <view wx:if="{{detail_list.length > 0}}" class="detail-list bg-white">
-    <view wx:for="{{detail_list}}" class="item br-b oh">
-      <view class="title fl br-r">{{item.name}}</view>
-      <view class="content cr-888 fl">{{item.value}}</view>
     </view>
   </view>
 
-  <import src="/pages/common/bottom_line.wxml" />
-  <template is="bottom_line" data="{{status: data_bottom_line_status}}"></template>
+  <view wx:if="{{detail != null}}">
+    <view class="goods bg-white spacing-mb">
+      <view wx:for="{{detail.items}}" class="goods-item oh">
+        <navigator url="/pages/goods-detail/goods-detail?goods_id={{item.goodsId}}" hover-class="none">
+          <view class="image-view">
+            <image class="goods-image fl" src="http://{{item.picUrl}}" mode="aspectFill" />
+            <view class="tx-right">
+              <image src="/images/otc.jpg" mode="scaleToFill" />
+            </view>
+          </view>
+          <view class="goods-base">
+            <view class="goods-title multi-text">{{detail.goodsName}}</view>
+            <view class="goods-attribute cr-888">规格:{{detail.unit}}</view>
+            <view class="oh goods-price">
+              <text class="sales-price">￥{{detail.saleTaxPrice}}
+        </text>
+              <text class="buy-number cr-888">x{{detail.num}}
+        </text>
+            </view>
+          </view>
+        </navigator>
+      </view>
+    </view>
+
+    <view wx:if="{{detail_list.length > 0}}" class="detail-list bg-white">
+      <view wx:for="{{detail_list}}" class="item br-b oh">
+        <view class="title fl br-r">{{item.name}}</view>
+        <view class="content cr-888 fl">{{item.value}}</view>
+      </view>
+    </view>
+  </view>
 </view>
 
 <view wx:if="{{detail == null}}">
-    <import src="/pages/common/nodata.wxml" />
-    <template is="nodata" data="{{status: data_list_loding_status, msg: data_list_loding_msg}}"></template>
-</view>
-
-<view class="nav-back tc wh-auto">
-  <navigator url="/pages/user-order/user-order" open-type="navigateBack" hover-class="none">
-    <button type="default" size="mini" class="cr-888 br" hover-class="none">返回</button>
-  </navigator>
+  <import src="/pages/common/nodata.wxml" />
+  <template is="nodata" data="{{status: data_list_loding_status, msg: data_list_loding_msg}}"></template>
 </view>

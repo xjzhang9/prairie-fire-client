@@ -154,6 +154,8 @@ Page({
         buy_submit_disabled_status: true
       });
 
+    var stauts = "1";
+     getApp().globalData.order_status = stauts;
       wx.request({
         url: "http://122.112.184.150:7002/prairie/order/create",
         method: "POST",
@@ -161,9 +163,10 @@ Page({
         dataType: "json",
         success: res => {
           wx.hideLoading();
+          console.log("===data===" + JSON.stringify(res.data));
           if (res.data.success == true) {
-            wx.redirectTo({
-              url: '/pages/user-order/user-order?status='+'已提交'
+            wx.switchTab({
+              url: '/pages/user-order/user-order'
             });
           } else {
             app.showToast(res.data.msg);

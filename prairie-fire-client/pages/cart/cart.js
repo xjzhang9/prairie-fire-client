@@ -317,8 +317,8 @@ Page({
 
     console.log("===data===" + JSON.stringify(data));
 
-    wx.navigateTo({
-      url: '/pages/buy/buy?data=' + JSON.stringify(data)
+    wx.redirectTo({
+       url: '/pages/buy/buy?data=' + JSON.stringify(data)
     });
   }
 

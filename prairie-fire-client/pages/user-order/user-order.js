@@ -6,13 +6,13 @@ Page({
     },
     totalNum: 0,
     totalPageNum: 0,
-    pageSize: 0,
+    pageSize: 5,
     pageIndex: 1,
     data_list_loding_status: 1,
     data_bottom_line_status: false,
-    params: null,
     input_keyword_value: '',
     load_status: 0,
+    status_flag:-1,
     nav_status_list: [{
         name: "全部",
         value: "-1"
@@ -34,53 +34,54 @@ Page({
         value: "4"
       },
       {
-        name: "已失效",
+        name: "已取消",
         value: "5,6"
       },
     ],
-
-    billState_list: [{
+    status_list: [
+      {
         name: "全部",
         value: "-1"
       },
-      {
+    {
         name: "INITIAL",
-        value: "1"
-      },
-      {
-        name: "已开票",
-        value: "2"
-      },
-      {
-        name: "已发货",
-        value: "3"
-      },
-      {
-        name: "已送达",
-        value: "4"
-      },
-      {
-        name: "已失效",
-        value: "5,6"
-      }
+      value: "1"
+    },
+    {
+      name: "ERP_TICKET",
+      value: "2"
+    },
+    {
+      name: "SHIPPED",
+      value: "3"
+    },
+    {
+      name: "DELIVERED",
+      value: "4"
+    },
+    {
+      name: "CANCEL",
+      value: "5,6"
+    },
     ],
     nav_status_index: 0,
   },
 
   onLoad(params) {
+    var status = getApp().globalData.order_status;
     // 是否指定状态
     var nav_status_index = 0;
-    if ((params.status || null) != null) {
+    if ((status || null) != null) {
       for (var i in this.data.nav_status_list) {
-        if (this.data.nav_status_list[i]['value'] == params.status) {
+        if (this.data.nav_status_list[i]['value'] == status) {
           nav_status_index = i;
           break;
         }
       }
     }
+    getApp().globalData.order_status = "-1";
 
     this.setData({
-      params: params,
       nav_status_index: nav_status_index,
     });
     this.init();
@@ -131,13 +132,20 @@ Page({
     });
 
     // 参数
-    var order_status = ((this.data.nav_status_list[this.data.nav_status_index] || null) == null) ? -1 : this.data.billState_list[this.data.nav_status_index]['value'];
+    var order_status = ((this.data.status_list[this.data.nav_status_index] || null) == null) ? "全部" : this.data.status_list[this.data.nav_status_index]['name'];
+    var url = "http://122.112.184.150:7002/prairie/order/list?mobile=" + "15155157296" + "&pageIndex=" + this.data.pageIndex + "&pageSize=" + this.data.pageSize;
 
+    if (order_status != "全部") {
+      url = url + "&billState=" + order_status +  "&pageIndex=" + this.data.pageIndex;
+    } else {
+      url = url +  "&pageIndex=" + this.data.pageIndex;
+    }
     // 获取数据
     wx.request({
-      url: "http://122.112.184.150:7002/prairie/order/list?mobile=" + "15155157296&billState=" + order_status + "&pageIndex=" + this.data.pageIndex,
+      url: url,
       method: "GET",
       success: res => {
+        console.log("===index===" + JSON.stringify(res.data));
         wx.hideLoading();
         wx.stopPullDownRefresh();
         if (res.data.success == true) {
@@ -156,7 +164,6 @@ Page({
                 dataList: temp_data_list,
               },
               totalNum: res.data.result.totalNum,
-              pageSize: res.data.result.pageSize,
               totalPageNum: res.data.result.totalPageNum,
               data_list_loding_status: 3,
               pageIndex: res.data.result.pageIndex + 1
@@ -171,15 +178,11 @@ Page({
           } else {
             this.setData({
               data_list_loding_status: 0,
+              result: {
+                dataList: [],
+              },
+              data_bottom_line_status: true
             });
-            if (this.data.pageIndex <= 1) {
-              this.setData({
-                result: {
-                  dataList: [],
-                },
-                data_bottom_line_status: false,
-              });
-            }
           }
         } else {
           this.setData({
@@ -195,7 +198,7 @@ Page({
 
         this.setData({
           data_list_loding_status: 2,
-          load_status: 1,
+          data_bottom_line_status: true
         });
         app.showToast("服务器请求出错");
       }
@@ -225,7 +228,7 @@ Page({
       success: result => {
         if (result.confirm) {
           // 参数
-          var id = e.currentTarget.dataset.value;
+          var billCode = e.currentTarget.dataset.value;
           var index = e.currentTarget.dataset.index;
 
           // 加载loding
@@ -234,23 +237,24 @@ Page({
           });
 
           wx.request({
-            url: app.get_request_url("cancel", "order"),
+            url: "http://122.112.184.150:7002/prairie/order/cancel?billCode=" + billCode,
             method: "POST",
-            data: {
-              id: id
-            },
+            data: { "business": "12", "mobile": "15155157296", "billCode": billCode },
             dataType: "json",
             success: res => {
               wx.hideLoading();
-              if (res.data.code == 0) {
-                var temp_data_list = this.data.data_list;
-                temp_data_list[index]['status'] = 5;
-                temp_data_list[index]['status_name'] = '已取消';
+              if (res.data.success == true) {
+                var temp_data_list = this.data.result.dataList;
+                temp_data_list[index]['billStateDesc'] = '已取消';
+                if (this.data.nav_status_index != -1) {
+                  temp_data_list.splice(index, 1);
+                }
                 this.setData({
-                  data_list: temp_data_list
+                  result: {
+                    dataList: temp_data_list,
+                  }
                 });
-
-                app.showToast(res.data.msg, "success");
+                app.showToast("订单已取消", "success");
               } else {
                 app.showToast(res.data.msg);
               }
@@ -274,7 +278,7 @@ Page({
   nav_event(e) {
     this.setData({
       nav_status_index: e.currentTarget.dataset.index || 0,
-      data_page: 1,
+      pageIndex: 1,
     });
     this.get_data_list(1);
   },

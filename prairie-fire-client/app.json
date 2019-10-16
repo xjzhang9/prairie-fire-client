@@ -43,7 +43,6 @@
     "request": 10000,
     "downloadFile": 10000
   },
-
   "plugins": {},
   "debug": true,
   "sitemapLocation": "sitemap.json"

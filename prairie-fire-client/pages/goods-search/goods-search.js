@@ -137,6 +137,9 @@ Page({
 
   // 滚动加载
   scroll_lower(e) {
-    this.get_data_list();
+    this.setData({
+      pageIndex: 1
+    });
+    this.get_data_list(1);
   },
 });

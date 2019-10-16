@@ -1,33 +1,38 @@
 <view wx:if="{{goods_list.length > 0}}" class="page">
   <!-- 地址 -->
   <view class="address bg-white arrow-right">
-      <view wx:if="{{address != null}}">
-        <view class="address-base oh">
-          <text>{{address.name}}</text>
-          <text class="fr">{{address.tel}}</text>
-        </view>
-        <view class="address-detail oh">
-          <image class="icon fl" src="/images/user-address.png" mode="widthFix" />
-          <view class="text fr">{{address.province_name}}{{address.city_name}}{{address.county_name}}{{address.address}}</view>
-        </view>
+    <view wx:if="{{address != null}}">
+      <view class="address-base oh">
+        <text>{{address.name}}</text>
+        <text class="fr">{{address.tel}}</text>
       </view>
+      <view class="address-detail oh">
+        <image class="icon fl" src="/images/user-address.png" mode="widthFix" />
+        <view class="text fr">{{address.province_name}}{{address.city_name}}{{address.county_name}}{{address.address}}</view>
+      </view>
+    </view>
   </view>
   <view class="address-divider spacing-mb"></view>
 
   <!-- 商品 -->
   <view class="goods bg-white spacing-mb">
     <view wx:for="{{goods_list}}" wx:key="key" class="goods-item oh">
-      <image class="goods-image fl" src="http://{{item.picUrl}}" mode="aspectFill" />
+                <view class="image-view">
+        <image class="goods-image fl" src="http://{{item.picUrl}}" mode="aspectFill" />
+           <view class="tx-right">
+          <image src="/images/otc.jpg" mode="scaleToFill" />
+        </view>
+             </view>
+      <!-- 基础 -->
       <view class="goods-base">
-        <view class="goods-title multi-text">{{item.goodsName}}</view>
-        <view class="goods-attribute cr-888">规格:{{item.unit}}</view>
-        <view class="oh goods-price">
-          <text class="sales-price">￥{{item.saleTaxPrice}}
-        </text>
-          <text class="buy-number cr-888">x{{item.num}}
-        </text>
+        <view class="goods-title multi-text">{{item.goodsName}}
+        </view>
+        <view class="goods-attribute spec cr-888">规格:{{item.goodsSpec}}</view>
+        <view class="sales-price goods-price spacing-mb">￥{{item.saleTaxPrice}}
+        <text class="buy-number cr-888">x{{item.num}} </text>
         </view>
       </view>
+     
     </view>
   </view>
 
@@ -37,7 +42,7 @@
       <text class="text-right" decode="nbsp">快递配送</text>
     </view>
     <view class="br-t detail">
-       <text decode="nbsp">支付方式:</text>
+      <text decode="nbsp">支付方式:</text>
       <text class="text-right" decode="nbsp">线下支付</text>
     </view>
   </view>
