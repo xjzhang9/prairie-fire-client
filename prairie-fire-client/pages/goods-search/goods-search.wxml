@@ -20,12 +20,11 @@
   </view>
   </view>
   
-  <view wx:if="{{result.dataList.length == 0}}">
+  <view wx:if="{{result.dataList.length <= 0}}">
     <import src="/pages/common/nodata.wxml" />
     <template is="nodata" data="{{status: data_list_loding_status}}"></template>
   </view>
 </scroll-view>
-
 
 <!-- 结尾 -->
 <import src="/pages/common/bottom_line.wxml" />

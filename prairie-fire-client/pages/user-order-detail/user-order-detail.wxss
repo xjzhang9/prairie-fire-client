@@ -62,7 +62,6 @@
 .detail-list .item view {
     line-height: 46rpx;
 }
-
 .goods-image {
     width: 140rpx;
     height: 140rpx;

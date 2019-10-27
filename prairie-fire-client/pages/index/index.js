@@ -62,7 +62,7 @@ Page({
     // 获取数据
     wx.request({
       //url: app.get_request_url("list", "goods"),
-      url: "http://122.112.184.150:7002/prairie/goods/list?pageIndex=" + this.data.pageIndex,
+      url: "http://youluckydog.top:7002/prairie/goods/list?pageIndex=" + this.data.pageIndex,
       method: "GET",
      // data: post_data,
      // dataType: "json",

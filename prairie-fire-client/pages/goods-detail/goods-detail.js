@@ -24,7 +24,6 @@ Page({
       goodsCode: "",
       shortName: "",
       logogram: "",
-      goodsSpec: "",
       place: "",
       goodsDesc: "",
       treatment: "",
@@ -421,12 +420,26 @@ Page({
       switch (this.data.buy_event_type) {
         case 'buy':
           // 进入订单确认页面
+          var jsondata = {};
+          var list = [];//创建数组
+          this.data.result.saleTaxPrice = this.data.result.saleTaxp;
+          this.data.result.num = this.data.temp_buy_number;
+          this.data.result.businessId = "12";
+          this.data.result.mobile = "15155157296";
+
+          var temp_data_list = this.data.result;
+          jsondata.total_price = this.data.result.saleTaxp * this.data.result.num;
+         
+          list.push(temp_data_list);//添加对象
+          jsondata.data = list;
+          // 进入订单确认页面
           var data = {
-            "buy_type": "goods",
-            "goods_id": this.data.goods.id,
-            "stock": this.data.temp_buy_number,
-            "spec": JSON.stringify(spec)
+            "buy_type": "cart",
+            "data": jsondata
           };
+
+          console.log("===data===" + JSON.stringify(data));
+          
           wx.navigateTo({
             url: '/pages/buy/buy?data=' + JSON.stringify(data)
           });
